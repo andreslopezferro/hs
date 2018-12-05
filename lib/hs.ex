@@ -42,6 +42,12 @@ defmodule HS do
       |> Map.put(:current_item_name, body["currentItemName"])
     {:error, body["txId"], product}
   end
+  defp response_format(%{"multiItemError" => multiItemError} = body) when multiItemError == true do
+    product = %{}
+      |> Map.put(:current_item_name, body["currentItemName"])
+      |> Map.put(:multi_item_error, body["multiItemError"])
+    {:error, body["txId"], product}
+  end
   defp response_format(%{"currentQuestionInteraction" => %{"type" => "VALUED"}} = body) do
     {:valued_question, body["txId"], body["currentQuestionInteraction"]["id"], question_response_format(body)}
   end
